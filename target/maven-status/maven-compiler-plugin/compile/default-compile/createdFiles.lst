@@ -1,0 +1,14 @@
+br\com\meuprojeto\model\CulturalDataRepository.class
+br\com\meuprojeto\model\Book.class
+br\com\meuprojeto\model\Season.class
+App.class
+br\com\meuprojeto\model\Series.class
+br\com\meuprojeto\model\JsonPersistenceManager.class
+br\com\meuprojeto\controller\MainController.class
+br\com\meuprojeto\model\Media.class
+br\com\meuprojeto\model\DigitalMedia.class
+br\com\meuprojeto\model\Movie.class
+br\com\meuprojeto\model\Review.class
+br\com\meuprojeto\view\Main.class
+br\com\meuprojeto\model\Actor.class
+br\com\meuprojeto\model\CulturalData.class

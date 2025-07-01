@@ -1,0 +1,9 @@
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.MainController">
+   <children>
+      <Label fx:id="mainTitleLabel" layoutX="300.0" layoutY="50.0" text="Diário Cultural" />
+      <Button fx:id="createNewMediaButton" layoutX="100.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleCreateNewMediaButton" text="Criar nova mídia" />
+      <Button fx:id="evaluateMediaButton" layoutX="350.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleEvaluateMediaButton" text="Avaliar mídia" />
+      <Button fx:id="searchSystemButton" layoutX="600.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleSearchSystemButton" text="Sistema de Busca" />
+   </children>
+</AnchorPane>
+

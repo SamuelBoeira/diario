@@ -1,0 +1,26 @@
+{
+  "books" : [ ],
+  "movies" : [ ],
+  "series" : [ {
+    "title" : "lost",
+    "genre" : "sus",
+    "releaseYear" : 10,
+    "consumed" : false,
+    "consumptionDate" : null,
+    "reviews" : [ ],
+    "originalTitle" : "lost",
+    "whereToWatch" : "net",
+    "cast" : [ {
+      "name" : "sam",
+      "character" : "tom"
+    } ],
+    "endYear" : 132,
+    "seasons" : [ {
+      "seasonNumber" : 1,
+      "year" : 10,
+      "episodeCount" : 5,
+      "reviews" : [ ]
+    } ],
+    "reviewsAsString" : "Sem avaliações"
+  } ]
+}
