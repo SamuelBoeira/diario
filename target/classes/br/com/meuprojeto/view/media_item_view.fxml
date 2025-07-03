@@ -7,33 +7,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mediaBox" prefWidth="740.0" spacing="5.0" style="-fx-border-color: #BDBDBD; -fx-border-width: 1; -fx-background-color: #FDFEFE; -fx-background-radius: 5; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.MediaItemController">
+<VBox fx:id="mediaBox" prefWidth="400.0" spacing="5.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.MediaItemController">
+   <padding>
+      <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+   </padding>
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label fx:id="titleLabel" text="Título da Mídia (Ano)">
+            <Label fx:id="titleLabel" style="-fx-font-weight: bold;" text="Título da Mídia (Ano)" HBox.hgrow="ALWAYS">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="typeLabel" style="-fx-background-color: #5DADE2; -fx-text-fill: white; -fx-padding: 2 6 2 6; -fx-background-radius: 8;" text="Tipo">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
+            <Label fx:id="typeLabel" style="-fx-font-style: italic; -fx-text-fill: #555;" text="Tipo" />
          </children>
       </HBox>
-      <Label fx:id="detailsLabel" text="Detalhes aqui..." wrapText="true" />
-      <HBox alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="200.0">
-         <children>
-            <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Editar" visible="false" />
-         </children>
+      <Label fx:id="detailsLabel" text="Detalhes: Gênero, Autor/Diretor" wrapText="true" />
+      <Label fx:id="ratingLabel" style="-fx-font-weight: bold; -fx-text-fill: #f39c12;" text="Avaliação: 5.0 ★">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="editButton" onAction="#handleEdit" managed="false" text="Editar" visible="false">
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets top="5.0" />
          </VBox.margin>
-      </HBox>
+      </Button>
    </children>
-   <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-   </padding>
 </VBox>

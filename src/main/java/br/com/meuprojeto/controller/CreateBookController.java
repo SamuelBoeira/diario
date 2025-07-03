@@ -12,6 +12,7 @@ import java.io.IOException;
 
 /**
  * Controlador para a tela de criação e edição de Livros.
+ * LÓGICA DE EDIÇÃO CORRIGIDA PARA MODIFICAR O OBJETO EXISTENTE.
  */
 public class CreateBookController {
     
@@ -28,9 +29,6 @@ public class CreateBookController {
     private CulturalData culturalData;
     private Book bookToEdit;
 
-    /**
-     * Inicializa o controlador, carregando os dados existentes.
-     */
     @FXML
     public void initialize() {
         try {
@@ -41,10 +39,6 @@ public class CreateBookController {
         }
     }
 
-    /**
-     * Configura a tela para edição, preenchendo os campos com os dados de um livro existente.
-     * @param book O livro a ser editado.
-     */
     public void setBookToEdit(Book book) {
         this.bookToEdit = book;
         titleField.setText(book.getTitle());
@@ -56,30 +50,45 @@ public class CreateBookController {
         saveButton.setText("Salvar Alterações");
     }
 
-    /**
-     * Manipula o clique no botão "Salvar".
-     */
     @FXML
     private void handleSave() {
         try {
-            // Cria um novo objeto com os dados da tela
-            Book updatedBook = new Book(
-                titleField.getText(),
-                genreField.getText(),
-                Integer.parseInt(releaseYearField.getText()),
-                authorField.getText(),
-                publisherField.getText(),
-                isbnField.getText(),
-                (bookToEdit != null) ? bookToEdit.isOwned() : false
-            );
+            String title = titleField.getText().trim();
+            int releaseYear = Integer.parseInt(releaseYearField.getText());
 
-            if (bookToEdit != null) {
-                // Modo de Edição: remove o antigo para não duplicar
-                culturalData.getBooks().remove(bookToEdit);
+            if (title.isEmpty()) {
+                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "O campo 'Título' não pode estar vazio.");
+                return;
             }
-            
-            // Adiciona o livro (novo ou atualizado) à lista
-            culturalData.getBooks().add(updatedBook);
+            if (releaseYear < 0) {
+                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "O ano não pode ser negativo.");
+                return;
+            }
+
+            boolean titleExists = culturalData.getBooks().stream()
+                .anyMatch(b -> b.getTitle().equalsIgnoreCase(title) && b != bookToEdit);
+            if (titleExists) {
+                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Já existe um livro com este título.");
+                return;
+            }
+
+            if (bookToEdit == null) { // --- MODO DE CRIAÇÃO ---
+                Book newBook = new Book(
+                    title, genreField.getText(), releaseYear,
+                    authorField.getText(), publisherField.getText(), isbnField.getText(), false
+                );
+                // No modo de criação, não precisamos mexer em `isOwned` ou reviews.
+                culturalData.getBooks().add(newBook);
+
+            } else { // --- MODO DE EDIÇÃO (CORRIGIDO) ---
+                bookToEdit.setTitle(title);
+                bookToEdit.setGenre(genreField.getText());
+                bookToEdit.setReleaseYear(releaseYear);
+                bookToEdit.setAuthor(authorField.getText());
+                bookToEdit.setPublisher(publisherField.getText());
+                bookToEdit.setIsbn(isbnField.getText());
+                // `isOwned` e `reviews` são preservados pois estamos modificando o objeto original.
+            }
             
             persistenceManager.saveCulturalData(culturalData);
             SceneManager.showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Livro salvo com sucesso!");
@@ -92,9 +101,6 @@ public class CreateBookController {
         }
     }
 
-    /**
-     * Fecha a janela atual.
-     */
     @FXML
     private void handleBackButton() {
         Stage stage = (Stage) backButton.getScene().getWindow();

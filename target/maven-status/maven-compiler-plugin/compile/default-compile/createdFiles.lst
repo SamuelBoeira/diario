@@ -1,8 +1,11 @@
 br\com\meuprojeto\controller\ListMediaController.class
 br\com\meuprojeto\model\Book.class
 br\com\meuprojeto\controller\SceneManager.class
+br\com\meuprojeto\controller\MakeReviewController.class
 br\com\meuprojeto\controller\CreateMediaSelectionController.class
+br\com\meuprojeto\controller\SeasonManagementController.class
 br\com\meuprojeto\controller\MainController.class
+br\com\meuprojeto\controller\ReviewController.class
 br\com\meuprojeto\controller\CreateSeriesController.class
 br\com\meuprojeto\model\Movie.class
 br\com\meuprojeto\model\Review.class
@@ -19,3 +22,4 @@ br\com\meuprojeto\model\Media.class
 br\com\meuprojeto\model\DigitalMedia.class
 br\com\meuprojeto\controller\CreateMovieController.class
 br\com\meuprojeto\controller\MediaItemController.class
+br\com\meuprojeto\controller\ActorManagementController.class

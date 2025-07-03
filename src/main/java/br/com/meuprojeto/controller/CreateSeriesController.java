@@ -1,8 +1,6 @@
 package br.com.meuprojeto.controller;
 
-import br.com.meuprojeto.model.CulturalData;
-import br.com.meuprojeto.model.JsonPersistenceManager;
-import br.com.meuprojeto.model.Series;
+import br.com.meuprojeto.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -10,13 +8,15 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controlador para a tela de criação e edição de Séries.
+ * LÓGICA DE EDIÇÃO CORRIGIDA PARA MODIFICAR O OBJETO EXISTENTE.
  */
 public class CreateSeriesController {
 
-    // Campos do FXML
     @FXML private TextField titleField;
     @FXML private TextField genreField;
     @FXML private TextField releaseYearField;
@@ -28,11 +28,12 @@ public class CreateSeriesController {
 
     private JsonPersistenceManager persistenceManager = new JsonPersistenceManager();
     private CulturalData culturalData;
-    private Series seriesToEdit; // Se for nulo, é criação. Se não, é edição.
+    private Series seriesToEdit;
+    
+    // Listas locais para gerenciar os dados durante a edição
+    private List<Actor> mainCast = new ArrayList<>();
+    private List<Season> seasons = new ArrayList<>();
 
-    /**
-     * Inicializa o controlador, carregando os dados existentes.
-     */
     @FXML
     public void initialize() {
         try {
@@ -43,10 +44,6 @@ public class CreateSeriesController {
         }
     }
 
-    /**
-     * Configura a tela para edição, preenchendo os campos com os dados de uma série existente.
-     * @param series A série a ser editada.
-     */
     public void setSeriesToEdit(Series series) {
         this.seriesToEdit = series;
         titleField.setText(series.getTitle());
@@ -55,29 +52,78 @@ public class CreateSeriesController {
         originalTitleField.setText(series.getOriginalTitle());
         whereToWatchField.setText(series.getWhereToWatch());
         endYearField.setText(String.valueOf(series.getEndYear()));
+        
+        // Carrega os dados existentes para as listas locais para edição
+        this.mainCast.clear();
+        this.seasons.clear();
+        this.mainCast.addAll(series.getCast());
+        this.seasons.addAll(series.getSeasons());
+
         saveButton.setText("Salvar Alterações");
     }
 
-    /**
-     * Manipula o clique no botão "Salvar".
-     * Cria uma nova série ou atualiza uma existente e salva no arquivo JSON.
-     */
+    @FXML
+    private void handleManageMainCast() {
+        Object controller = SceneManager.openModalWindow("actor_management_view.fxml", "Gerenciar Elenco Principal");
+        if (controller instanceof ActorManagementController actorController) {
+            actorController.setCast(this.mainCast);
+            this.mainCast = actorController.getCast();
+        }
+    }
+
+    @FXML
+    private void handleManageSeasons() {
+        Object controller = SceneManager.openModalWindow("season_management_view.fxml", "Gerenciar Temporadas");
+        if (controller instanceof SeasonManagementController seasonController) {
+            seasonController.setSeasons(this.seasons);
+            this.seasons = seasonController.getSeasons();
+        }
+    }
+    
     @FXML
     private void handleSave() {
         try {
-            if (seriesToEdit == null) { // Modo de Criação
+            String title = titleField.getText().trim();
+            int releaseYear = Integer.parseInt(releaseYearField.getText());
+            int endYear = Integer.parseInt(endYearField.getText());
+
+            if (title.isEmpty()) {
+                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "O campo 'Título' não pode estar vazio.");
+                return;
+            }
+            if (releaseYear < 0 || endYear < 0) {
+                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Os anos não podem ser negativos.");
+                return;
+            }
+
+            boolean titleExists = culturalData.getSeries().stream()
+                .anyMatch(s -> s.getTitle().equalsIgnoreCase(title) && s != seriesToEdit);
+            if (titleExists) {
+                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Já existe uma série com este título.");
+                return;
+            }
+
+            if (seriesToEdit == null) { // --- MODO DE CRIAÇÃO ---
                 Series newSeries = new Series(
-                        titleField.getText(), genreField.getText(), Integer.parseInt(releaseYearField.getText()),
-                        originalTitleField.getText(), whereToWatchField.getText(), Integer.parseInt(endYearField.getText())
+                    title, genreField.getText(), releaseYear,
+                    originalTitleField.getText(), whereToWatchField.getText(), endYear
                 );
+                newSeries.setCast(this.mainCast);
+                newSeries.setSeasons(this.seasons);
                 culturalData.getSeries().add(newSeries);
-            } else { // Modo de Edição
-                culturalData.getSeries().remove(seriesToEdit); // Remove a antiga
-                Series updatedSeries = new Series(
-                        titleField.getText(), genreField.getText(), Integer.parseInt(releaseYearField.getText()),
-                        originalTitleField.getText(), whereToWatchField.getText(), Integer.parseInt(endYearField.getText())
-                );
-                culturalData.getSeries().add(updatedSeries); // Adiciona a nova
+
+            } else { // --- MODO DE EDIÇÃO (CORRIGIDO) ---
+                seriesToEdit.setTitle(title);
+                seriesToEdit.setGenre(genreField.getText());
+                seriesToEdit.setReleaseYear(releaseYear);
+                seriesToEdit.setOriginalTitle(originalTitleField.getText());
+                seriesToEdit.setWhereToWatch(whereToWatchField.getText());
+                seriesToEdit.setEndYear(endYear);
+                // Atualiza o elenco e as temporadas NO OBJETO ORIGINAL
+                seriesToEdit.getCast().clear();
+                seriesToEdit.getCast().addAll(this.mainCast);
+                seriesToEdit.getSeasons().clear();
+                seriesToEdit.getSeasons().addAll(this.seasons);
             }
 
             persistenceManager.saveCulturalData(culturalData);
@@ -91,9 +137,6 @@ public class CreateSeriesController {
         }
     }
 
-    /**
-     * Fecha a janela atual.
-     */
     @FXML
     private void handleBackButton() {
         Stage stage = (Stage) backButton.getScene().getWindow();

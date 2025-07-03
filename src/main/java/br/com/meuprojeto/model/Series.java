@@ -15,6 +15,11 @@ public class Series extends DigitalMedia {
         this.endYear = endYear;
     }
 
+    /**
+     * Calcula a média de avaliação (rating) GERAL para a série.
+     * A média é calculada a partir da média das médias de cada temporada que possui avaliação.
+     * @return A média geral de 1 a 5, ou 0.0 se nenhuma temporada foi avaliada.
+     */
     @Override
     @JsonIgnore
     public double getAverageRating() {
@@ -23,10 +28,10 @@ public class Series extends DigitalMedia {
         }
         // Calcula a média das médias das temporadas que têm avaliações.
         return seasons.stream()
-                .mapToDouble(Season::getAverageRating)
-                .filter(avg -> avg > 0)
-                .average()
-                .orElse(0.0);
+                .mapToDouble(Season::getAverageRating) // Pega a média de cada temporada
+                .filter(avg -> avg > 0) // Considera apenas temporadas que foram avaliadas
+                .average() // Calcula a média final
+                .orElse(0.0); // Retorna 0.0 se nenhuma temporada tiver avaliação
     }
 
     // Getters e Setters

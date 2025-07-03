@@ -29,32 +29,22 @@ public class ListMediaController {
 
     private List<Media> allMedia;
 
-    /**
-     * Método de inicialização do controlador.
-     * Carrega os dados, configura as opções de ordenação e exibe a lista inicial.
-     */
     @FXML
     public void initialize() {
-        // Configura as opções no ComboBox (menu de ordenação)
         sortOptionsComboBox.setItems(FXCollections.observableArrayList(
                 "Padrão (Por Tipo)",
                 "Título (A-Z)",
                 "Ano (Mais Recente)",
-                "Ano (Mais Antigo)"
+                "Ano (Mais Antigo)",
+                "Melhor Avaliado", // Adicionado
+                "Pior Avaliado"   // Adicionado
         ));
-        // Define um valor padrão
         sortOptionsComboBox.setValue("Padrão (Por Tipo)");
 
-        // Carrega todas as mídias
         loadAllMedia();
-        // Exibe as mídias na tela
         displayMedia(allMedia);
     }
 
-    /**
-     * Carrega todas as mídias (livros, filmes e séries) do arquivo JSON
-     * e as armazena em uma única lista `allMedia`.
-     */
     private void loadAllMedia() {
         this.allMedia = new ArrayList<>();
         try {
@@ -71,10 +61,6 @@ public class ListMediaController {
         }
     }
 
-    /**
-     * Limpa a visualização atual e exibe uma nova lista de mídias.
-     * @param mediaList A lista de mídias a ser exibida.
-     */
     private void displayMedia(List<Media> mediaList) {
         mediaContainer.getChildren().clear();
         for (Media media : mediaList) {
@@ -82,16 +68,11 @@ public class ListMediaController {
         }
     }
 
-    /**
-     * Manipula a seleção de uma nova opção de ordenação.
-     * Ordena a lista `allMedia` de acordo com a opção escolhida e atualiza a visualização.
-     */
     @FXML
     private void handleSort() {
         String selection = sortOptionsComboBox.getValue();
         if (selection == null) return;
 
-        // Cria uma cópia da lista para não modificar a original permanentemente
         List<Media> sortedList = new ArrayList<>(allMedia);
 
         switch (selection) {
@@ -104,8 +85,13 @@ public class ListMediaController {
             case "Ano (Mais Antigo)":
                 sortedList.sort(Comparator.comparingInt(Media::getReleaseYear));
                 break;
-            default: // "Padrão (Por Tipo)"
-                // A lista `allMedia` já está ordenada por tipo por padrão
+            case "Melhor Avaliado": // Adicionado
+                sortedList.sort(Comparator.comparingDouble(Media::getAverageRating).reversed());
+                break;
+            case "Pior Avaliado": // Adicionado
+                sortedList.sort(Comparator.comparingDouble(Media::getAverageRating));
+                break;
+            default:
                 sortedList = allMedia;
                 break;
         }
@@ -113,10 +99,6 @@ public class ListMediaController {
         displayMedia(sortedList);
     }
 
-    /**
-     * Carrega a "caixa" de item de mídia e a adiciona ao contêiner principal.
-     * @param media O objeto de mídia a ser exibido.
-     */
     private void addMediaItemToView(Media media) {
         try {
             URL fxmlUrl = getClass().getResource("/br/com/meuprojeto/view/media_item_view.fxml");
@@ -133,9 +115,6 @@ public class ListMediaController {
         }
     }
     
-    /**
-     * Fecha a janela atual, voltando para o menu anterior.
-     */
     @FXML
     private void handleBackButton() {
         Stage stage = (Stage) backButton.getScene().getWindow();

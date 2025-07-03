@@ -4,66 +4,89 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.CreateSeriesController">
-   <top>
-      <Label text="Adicionar / Editar Série" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets top="20.0" />
-         </BorderPane.margin>
-      </Label>
-   </top>
-   <center>
-      <GridPane hgap="10.0" vgap="15.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.33331298828125" minWidth="10.0" prefWidth="131.33331298828125" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="468.66668701171875" minWidth="10.0" prefWidth="448.66668701171875" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         </rowConstraints>
+<AnchorPane prefHeight="520.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.CreateSeriesController">
+   <children>
+      <VBox spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
-            <Label text="Título:" GridPane.halignment="RIGHT" />
-            <Label text="Gênero:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <Label text="Ano de Lançamento:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-            <Label text="Título Original:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <Label text="Onde Assistir:" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-            <Label text="Ano de Término:" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-            <TextField fx:id="titleField" GridPane.columnIndex="1" />
-            <TextField fx:id="genreField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="releaseYearField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="originalTitleField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="whereToWatchField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="endYearField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Adicionar/Editar Série">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <GridPane hgap="10.0" vgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <VBox>
+                     <children>
+                        <Label text="Título da Série" />
+                        <TextField fx:id="titleField" promptText="Ex: Breaking Bad" />
+                     </children>
+                  </VBox>
+                  <VBox GridPane.columnIndex="1">
+                     <children>
+                        <Label text="Gênero" />
+                        <TextField fx:id="genreField" promptText="Ex: Drama, Suspense" />
+                     </children>
+                  </VBox>
+                  <VBox GridPane.rowIndex="1">
+                     <children>
+                        <Label text="Ano de Lançamento" />
+                        <TextField fx:id="releaseYearField" promptText="Ex: 2008" />
+                     </children>
+                  </VBox>
+                  <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Label text="Ano de Término" />
+                        <TextField fx:id="endYearField" promptText="Ex: 2013" />
+                     </children>
+                  </VBox>
+                  <VBox GridPane.rowIndex="2">
+                     <children>
+                        <Label text="Título Original (se aplicável)" />
+                        <TextField fx:id="originalTitleField" />
+                     </children>
+                  </VBox>
+                  <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label text="Onde Assistir" />
+                        <TextField fx:id="whereToWatchField" promptText="Ex: Netflix" />
+                     </children>
+                  </VBox>
+               </children>
+            </GridPane>
+            <HBox spacing="20.0">
+               <children>
+                  <Button maxWidth="1.7976931348623157E308" onAction="#handleManageMainCast" text="Gerenciar Elenco Principal" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" onAction="#handleManageSeasons" text="Gerenciar Temporadas" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" spacing="10.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Voltar" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" text="Salvar Nova Série" />
+               </children>
+            </HBox>
          </children>
-         <BorderPane.margin>
-            <Insets left="10.0" right="20.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </center>
-   <bottom>
-      <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="200.0" spacing="15.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Voltar" />
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" style="-fx-base: #27AE60;" text="Salvar" />
-         </children>
-         <padding>
-            <Insets right="20.0" />
-         </padding>
-      </HBox>
-   </bottom>
-</BorderPane>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.SeasonManagementController">
+   <children>
+      <HBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Editor de Temporadas">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label text="Número da Temporada:" />
+                  <TextField fx:id="seasonNumberField" promptText="Ex: 1" />
+                  <Label text="Ano de Lançamento:" />
+                  <TextField fx:id="releaseYearField" promptText="Ex: 2008" />
+                  <Label text="Número de Episódios:" />
+                  <TextField fx:id="episodesField" promptText="Ex: 7" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <Button fx:id="saveSeasonButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSaveSeason" text="Adicionar Nova" HBox.hgrow="ALWAYS" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearFields" text="Limpar Campos" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Lista de Temporadas">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="seasonListView" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleManageSeasonCast" text="Gerenciar Elenco da Temporada Selecionada" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRemoveSeason" text="Remover Temporada Selecionada" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Button fx:id="closeButton" layoutX="531.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleClose" text="Salvar e Fechar" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+   </children>
+</AnchorPane>

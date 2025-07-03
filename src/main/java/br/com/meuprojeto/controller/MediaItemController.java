@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert; // IMPORT ADICIONADO AQUI
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -13,16 +13,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 /**
- * Controlador para o item visual individual de uma mídia (media_item_view.fxml).
- * Cada "caixa" na tela de listagem ou busca terá uma instância deste controlador.
+ * Controlador para o item visual individual de uma mídia.
+ * CORRIGIDO para abrir a janela de edição corretamente.
  */
 public class MediaItemController {
 
     @FXML private Label titleLabel;
     @FXML private Label typeLabel;
     @FXML private Label detailsLabel;
+    @FXML private Label ratingLabel;
     @FXML private VBox mediaBox;
     @FXML private Button editButton;
 
@@ -47,36 +49,52 @@ public class MediaItemController {
             mediaBox.setStyle("-fx-background-color: #EBF5FB; -fx-border-color: #3498DB; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;");
         }
         detailsLabel.setText(details);
+        displayRating();
+    }
+
+    private void displayRating() {
+        double averageRating = media.getAverageRating();
+        if (averageRating > 0) {
+            DecimalFormat df = new DecimalFormat("#.#");
+            ratingLabel.setText("Avaliação: " + df.format(averageRating) + " ★");
+        } else {
+            ratingLabel.setText("Ainda não avaliado");
+        }
     }
 
     public void showEditButton() {
         editButton.setVisible(true);
+        editButton.setManaged(true);
     }
 
     @FXML
     private void handleEdit() {
+        String fxmlFile = "";
+        String title = "";
+
         if (media instanceof Book) {
-            openEditWindow("create_book_view.fxml", "Editar Livro", media);
+            fxmlFile = "create_book_view.fxml";
+            title = "Editar Livro";
         } else if (media instanceof Movie) {
-            openEditWindow("create_movie_view.fxml", "Editar Filme", media);
+            fxmlFile = "create_movie_view.fxml";
+            title = "Editar Filme";
         } else if (media instanceof Series) {
-            openEditWindow("create_series_view.fxml", "Editar Série", media);
+            fxmlFile = "create_series_view.fxml";
+            title = "Editar Série";
         }
+
+        openEditWindow(fxmlFile, title, media);
     }
 
+    /**
+     * Abre a janela de edição, carregando os dados da mídia ANTES de exibi-la.
+     */
     private void openEditWindow(String fxmlFile, String title, Media mediaData) {
         try {
-            String fxmlPath = "/br/com/meuprojeto/view/" + fxmlFile;
-            URL fxmlUrl = getClass().getResource(fxmlPath);
-
-            if (fxmlUrl == null) {
-                SceneManager.showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível encontrar o FXML de edição: " + fxmlFile);
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/meuprojeto/view/" + fxmlFile));
             Parent root = loader.load();
 
+            // Pega o controlador e passa os dados da mídia para edição
             if (mediaData instanceof Book book) {
                 CreateBookController controller = loader.getController();
                 controller.setBookToEdit(book);
