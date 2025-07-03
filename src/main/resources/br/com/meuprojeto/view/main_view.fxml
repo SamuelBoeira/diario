@@ -1,9 +1,21 @@
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.MainController">
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="30.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.MainController">
    <children>
-      <Label fx:id="mainTitleLabel" layoutX="300.0" layoutY="50.0" text="Diário Cultural" />
-      <Button fx:id="createNewMediaButton" layoutX="100.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleCreateNewMediaButton" text="Criar nova mídia" />
-      <Button fx:id="evaluateMediaButton" layoutX="350.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleEvaluateMediaButton" text="Avaliar mídia" />
-      <Button fx:id="searchSystemButton" layoutX="600.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleSearchSystemButton" text="Sistema de Busca" />
+      <Label text="Diário Cultural">
+         <font><Font name="System Bold" size="48.0" /></font>
+      </Label>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="15.0">
+         <children>
+            <Button onAction="#handleCreateNewMedia" maxWidth="1.7976931348623157E308" prefHeight="45.0" text="Criar Nova Mídia" />
+            <Button onAction="#handleListMedia" maxWidth="1.7976931348623157E308" prefHeight="45.0" text="Listar Mídias" />
+            <Button onAction="#handleSearchMedia" maxWidth="1.7976931348623157E308" prefHeight="45.0" text="Buscar e Editar Mídias" />
+         </children>
+      </VBox>
    </children>
-</AnchorPane>
-
+   <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+</VBox>

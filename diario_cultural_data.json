@@ -1,0 +1,44 @@
+{
+  "books" : [ {
+    "type" : "book",
+    "title" : "abc",
+    "genre" : "terror",
+    "releaseYear" : 2004,
+    "consumed" : false,
+    "consumptionDate" : null,
+    "reviews" : [ ],
+    "author" : "eu",
+    "publisher" : "tu",
+    "isbn" : "123",
+    "owned" : false
+  } ],
+  "movies" : [ {
+    "type" : "movie",
+    "title" : "tom",
+    "genre" : "rom",
+    "releaseYear" : 20,
+    "consumed" : false,
+    "consumptionDate" : null,
+    "reviews" : [ ],
+    "originalTitle" : "toom",
+    "whereToWatch" : "net",
+    "cast" : [ ],
+    "duration" : 20,
+    "director" : "eu",
+    "screenplay" : "eu"
+  } ],
+  "series" : [ {
+    "type" : "series",
+    "title" : "lost",
+    "genre" : "sus",
+    "releaseYear" : 2001,
+    "consumed" : false,
+    "consumptionDate" : null,
+    "reviews" : [ ],
+    "originalTitle" : "lost",
+    "whereToWatch" : "net",
+    "cast" : [ ],
+    "endYear" : 2012,
+    "seasons" : [ ]
+  } ]
+}

@@ -1,76 +1,24 @@
 package br.com.meuprojeto.model;
+
 import java.time.LocalDate;
 
-/**
- * Classe que representa uma avaliação/review de uma mídia.
- */
 public class Review {
-    private int rating;
+    private int rating; // 1 a 5
     private String comment;
-    private LocalDate date;
+    private LocalDate reviewDate;
 
-    /**
-     * Construtor padrão (necessário para Jackson).
-     */
-    public Review() {
-        // Construtor vazio necessário para desserialização JSON
-    }
-
-    /**
-     * Construtor da classe Review.
-     * 
-     * @param rating Avaliação de 1 a 5 estrelas
-     * @param comment Comentário sobre a mídia avaliada
-     * @param date Data em que a avaliação foi feita
-     */
-    public Review(int rating, String comment, LocalDate date) {
+    public Review() {}
+    public Review(int rating, String comment) {
         this.rating = rating;
         this.comment = comment;
-        this.date = date;
+        this.reviewDate = LocalDate.now();
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    /**
-     * Define uma nova nota para a avaliação.
-     * 
-     * @param rating A nova nota da avaliação
-     */
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * Define um novo comentário para a avaliação.
-     * 
-     * @param comment O novo comentário da avaliação
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    /**
-     * Define uma nova data para a avaliação.
-     * 
-     * @param date A nova data da avaliação
-     */
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Avaliação: %d/5 - Data: %s\nComentário: %s",
-                rating, date.toString(), comment);
-    }
+    // Getters e Setters
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
+    public LocalDate getReviewDate() { return reviewDate; }
+    public void setReviewDate(LocalDate reviewDate) { this.reviewDate = reviewDate; }
 }

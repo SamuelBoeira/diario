@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.meuprojeto.controller.CreateMediaSelectionController">
+   <top>
+      <Label text="O que você deseja criar?" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="15.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button onAction="#handleCreateBook" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" text="Livro" />
+            <Button onAction="#handleCreateMovie" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" text="Filme" />
+            <Button onAction="#handleCreateSeries" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" text="Série" />
+         </children>
+         <padding>
+            <Insets left="100.0" right="100.0" />
+         </padding>
+      </VBox>
+   </center>
+   <bottom>
+      <Button fx:id="backButton" onAction="#handleBackButton" mnemonicParsing="false" text="Voltar" BorderPane.alignment="CENTER_LEFT">
+         <BorderPane.margin>
+            <Insets bottom="15.0" left="15.0" />
+         </BorderPane.margin>
+      </Button>
+   </bottom>
+</BorderPane>
