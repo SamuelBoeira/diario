@@ -12,7 +12,6 @@ import java.io.IOException;
 
 /**
  * Controlador para a tela de criação e edição de Livros.
- * LÓGICA DE EDIÇÃO CORRIGIDA PARA MODIFICAR O OBJETO EXISTENTE.
  */
 public class CreateBookController {
     
@@ -65,8 +64,10 @@ public class CreateBookController {
                 return;
             }
 
+            /*usa .equals() para comparar o conteúdo dos objetos.
+            */
             boolean titleExists = culturalData.getBooks().stream()
-                .anyMatch(b -> b.getTitle().equalsIgnoreCase(title) && b != bookToEdit);
+                .anyMatch(b -> b.getTitle().equalsIgnoreCase(title) && !b.equals(bookToEdit));
             if (titleExists) {
                 SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Já existe um livro com este título.");
                 return;
@@ -77,17 +78,15 @@ public class CreateBookController {
                     title, genreField.getText(), releaseYear,
                     authorField.getText(), publisherField.getText(), isbnField.getText(), false
                 );
-                // No modo de criação, não precisamos mexer em `isOwned` ou reviews.
                 culturalData.getBooks().add(newBook);
 
-            } else { // --- MODO DE EDIÇÃO (CORRIGIDO) ---
+            } else { // --- MODO DE EDIÇÃO ---
                 bookToEdit.setTitle(title);
                 bookToEdit.setGenre(genreField.getText());
                 bookToEdit.setReleaseYear(releaseYear);
                 bookToEdit.setAuthor(authorField.getText());
                 bookToEdit.setPublisher(publisherField.getText());
                 bookToEdit.setIsbn(isbnField.getText());
-                // `isOwned` e `reviews` são preservados pois estamos modificando o objeto original.
             }
             
             persistenceManager.saveCulturalData(culturalData);

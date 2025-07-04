@@ -31,13 +31,14 @@ public class ListMediaController {
 
     @FXML
     public void initialize() {
+        // Opções de ordenação centralizadas e completas
         sortOptionsComboBox.setItems(FXCollections.observableArrayList(
                 "Padrão (Por Tipo)",
                 "Título (A-Z)",
                 "Ano (Mais Recente)",
                 "Ano (Mais Antigo)",
-                "Melhor Avaliado", // Adicionado
-                "Pior Avaliado"   // Adicionado
+                "Melhor Avaliado",
+                "Pior Avaliado"
         ));
         sortOptionsComboBox.setValue("Padrão (Por Tipo)");
 
@@ -75,6 +76,7 @@ public class ListMediaController {
 
         List<Media> sortedList = new ArrayList<>(allMedia);
 
+        // Lógica de ordenação expandida
         switch (selection) {
             case "Título (A-Z)":
                 sortedList.sort(Comparator.comparing(Media::getTitle, String.CASE_INSENSITIVE_ORDER));
@@ -85,14 +87,16 @@ public class ListMediaController {
             case "Ano (Mais Antigo)":
                 sortedList.sort(Comparator.comparingInt(Media::getReleaseYear));
                 break;
-            case "Melhor Avaliado": // Adicionado
+            case "Melhor Avaliado":
                 sortedList.sort(Comparator.comparingDouble(Media::getAverageRating).reversed());
                 break;
-            case "Pior Avaliado": // Adicionado
+            case "Pior Avaliado":
                 sortedList.sort(Comparator.comparingDouble(Media::getAverageRating));
                 break;
             default:
-                sortedList = allMedia;
+                // "Padrão (Por Tipo)" não requer ordenação extra,
+                // pois os dados já são carregados nessa ordem.
+                sortedList = new ArrayList<>(allMedia);
                 break;
         }
         
@@ -107,6 +111,8 @@ public class ListMediaController {
 
             MediaItemController controller = loader.getController();
             controller.setData(media);
+            // Mostra o botão de editar ao listar as mídias
+            controller.showEditButton();
 
             mediaContainer.getChildren().add(mediaNode);
         } catch (IOException e) {

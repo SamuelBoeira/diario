@@ -73,13 +73,11 @@ public class SeasonManagementController {
             int releaseYear = Integer.parseInt(releaseYearField.getText());
             int numEpisodes = Integer.parseInt(episodesField.getText());
 
-            // --- VALIDAÇÃO ---
             if (seasonNumber <= 0 || releaseYear <= 0 || numEpisodes <= 0) {
                 SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Os campos numéricos devem ser maiores que zero.");
                 return;
             }
 
-            // --- VERIFICAÇÃO DE DUPLICATAS ---
             boolean numberExists = seasonList.stream()
                 .anyMatch(s -> s.getSeasonNumber() == seasonNumber && s != selectedSeason);
             if (numberExists) {

@@ -15,29 +15,24 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Controlador para a tela de busca de mídias.
- * Permite filtrar por tipo, critério e termo, e ordenar os resultados.
+ * Permite filtrar por tipo, critério e termo. A funcionalidade de ordenação foi movida.
  */
 public class SearchController {
 
     @FXML private ComboBox<String> mediaTypeComboBox;
     @FXML private ComboBox<String> searchCriteriaComboBox;
-    @FXML private ComboBox<String> sortOrderComboBox; // Novo ComboBox para ordenação
     @FXML private TextField searchTextField;
     @FXML private VBox resultsContainer;
     @FXML private Button backButton;
 
     private CulturalData culturalData;
 
-    /**
-     * Inicializa o controlador, carregando os dados e configurando os menus.
-     */
     @FXML
     public void initialize() {
         try {
@@ -47,52 +42,32 @@ public class SearchController {
             culturalData = new CulturalData();
         }
 
-        // Configura o menu de tipo de mídia
         mediaTypeComboBox.setItems(FXCollections.observableArrayList("Todos", "Livro", "Filme", "Série"));
         mediaTypeComboBox.setValue("Todos");
 
-        // Adiciona um listener para mudar os critérios de busca quando o tipo de mídia muda
         mediaTypeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> updateSearchCriteria());
-
-        // Configura as opções de ordenação
-        sortOrderComboBox.setItems(FXCollections.observableArrayList(
-                "Padrão",
-                "Título (A-Z)",
-                "Melhor Avaliado",
-                "Pior Avaliado"
-        ));
-        sortOrderComboBox.setValue("Padrão");
 
         updateSearchCriteria();
     }
 
-    /**
-     * Atualiza o menu de critérios de busca com base no tipo de mídia selecionado.
-     */
     private void updateSearchCriteria() {
         String mediaType = mediaTypeComboBox.getValue();
         if (mediaType == null) return;
 
-        // Critérios comuns a todos
         List<String> criteria = new ArrayList<>(List.of("Título", "Gênero", "Ano de Lançamento"));
 
-        // Adiciona critério de Ator se o tipo for Filme, Série ou Todos
         if (mediaType.equals("Filme") || mediaType.equals("Série") || mediaType.equals("Todos")) {
             criteria.add("Ator");
         }
         
         searchCriteriaComboBox.setItems(FXCollections.observableArrayList(criteria));
-        searchCriteriaComboBox.setValue("Título"); // Define um padrão
+        searchCriteriaComboBox.setValue("Título");
     }
 
-    /**
-     * Executa a busca com base nos filtros selecionados e exibe os resultados.
-     */
     @FXML
     private void handleSearch() {
         String mediaType = mediaTypeComboBox.getValue();
         String criteria = searchCriteriaComboBox.getValue();
-        String sortOrder = sortOrderComboBox.getValue();
         String query = searchTextField.getText().toLowerCase().trim();
 
         if (mediaType == null || criteria == null || query.isEmpty()) {
@@ -102,11 +77,7 @@ public class SearchController {
 
         resultsContainer.getChildren().clear();
 
-        // Coleta os resultados da busca
         List<Media> searchResults = findMedia(mediaType, criteria, query);
-
-        // Ordena os resultados
-        sortMedia(searchResults, sortOrder);
 
         if (searchResults.isEmpty()) {
             SceneManager.showAlert(Alert.AlertType.INFORMATION, "Busca", "Nenhum resultado encontrado.");
@@ -117,12 +88,7 @@ public class SearchController {
         }
     }
 
-    /**
-     * Encontra mídias com base no tipo, critério e termo de busca.
-     * @return Uma lista de mídias que correspondem à busca.
-     */
     private List<Media> findMedia(String mediaType, String criteria, String query) {
-        // Começa com um stream de todas as mídias
         Stream<Media> allMediaStream = Stream.concat(
             culturalData.getBooks().stream(),
             Stream.concat(
@@ -131,7 +97,6 @@ public class SearchController {
             )
         );
 
-        // Filtra pelo tipo de mídia, se não for "Todos"
         if (!mediaType.equals("Todos")) {
             allMediaStream = allMediaStream.filter(media -> {
                 return switch (mediaType) {
@@ -143,15 +108,10 @@ public class SearchController {
             });
         }
 
-        // Filtra pelo critério de busca
         return allMediaStream.filter(media -> mediaMatches(media, criteria, query))
                              .collect(Collectors.toList());
     }
 
-    /**
-     * Verifica se uma mídia corresponde a um critério de busca.
-     * @return true se a mídia corresponder, false caso contrário.
-     */
     private boolean mediaMatches(Media media, String criteria, String query) {
         return switch (criteria) {
             case "Título" -> media.getTitle().toLowerCase().contains(query);
@@ -159,39 +119,22 @@ public class SearchController {
             case "Ano de Lançamento" -> String.valueOf(media.getReleaseYear()).contains(query);
             case "Ator" -> {
                 if (media instanceof DigitalMedia digitalMedia) {
-                    // Busca no elenco principal
                     boolean inMainCast = digitalMedia.getCast().stream()
                         .anyMatch(actor -> actor.getName().toLowerCase().contains(query));
                     if (inMainCast) yield true;
 
-                    // Se for série, busca no elenco de cada temporada
                     if (digitalMedia instanceof Series series) {
                         yield series.getSeasons().stream()
                             .flatMap(season -> season.getCast().stream())
                             .anyMatch(actor -> actor.getName().toLowerCase().contains(query));
                     }
                 }
-                yield false; // Não é DigitalMedia ou não encontrou o ator
+                yield false;
             }
             default -> false;
         };
     }
     
-    /**
-     * Ordena a lista de mídias de acordo com a opção selecionada.
-     */
-    private void sortMedia(List<Media> mediaList, String sortOrder) {
-        switch (sortOrder) {
-            case "Título (A-Z)" -> mediaList.sort(Comparator.comparing(Media::getTitle, String.CASE_INSENSITIVE_ORDER));
-            case "Melhor Avaliado" -> mediaList.sort(Comparator.comparingDouble(Media::getAverageRating).reversed());
-            case "Pior Avaliado" -> mediaList.sort(Comparator.comparingDouble(Media::getAverageRating));
-            default -> { /* Padrão, não faz nada */ }
-        }
-    }
-    
-    /**
-     * Adiciona um item de mídia à lista de resultados, tornando o botão "Editar" visível.
-     */
     private void addMediaItemToView(Media media) {
         try {
             URL fxmlUrl = getClass().getResource("/br/com/meuprojeto/view/media_item_view.fxml");

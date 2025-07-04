@@ -75,7 +75,9 @@ public class CreateSeriesController {
     private void handleManageSeasons() {
         Object controller = SceneManager.openModalWindow("season_management_view.fxml", "Gerenciar Temporadas");
         if (controller instanceof SeasonManagementController seasonController) {
+            // Envia a lista de temporadas atual para a janela de gerenciamento
             seasonController.setSeasons(this.seasons);
+            // Após a janela ser fechada, recupera a lista potencialmente modificada
             this.seasons = seasonController.getSeasons();
         }
     }
@@ -97,7 +99,7 @@ public class CreateSeriesController {
             }
 
             boolean titleExists = culturalData.getSeries().stream()
-                .anyMatch(s -> s.getTitle().equalsIgnoreCase(title) && s != seriesToEdit);
+                .anyMatch(s -> s.getTitle().equalsIgnoreCase(title) && !s.equals(seriesToEdit));
             if (titleExists) {
                 SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Já existe uma série com este título.");
                 return;
@@ -112,7 +114,7 @@ public class CreateSeriesController {
                 newSeries.setSeasons(this.seasons);
                 culturalData.getSeries().add(newSeries);
 
-            } else { // --- MODO DE EDIÇÃO (CORRIGIDO) ---
+            } else { // --- MODO DE EDIÇÃO ---
                 seriesToEdit.setTitle(title);
                 seriesToEdit.setGenre(genreField.getText());
                 seriesToEdit.setReleaseYear(releaseYear);

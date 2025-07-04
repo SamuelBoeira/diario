@@ -3,6 +3,7 @@ br\com\meuprojeto\model\Book.class
 br\com\meuprojeto\controller\SceneManager.class
 br\com\meuprojeto\controller\MakeReviewController.class
 br\com\meuprojeto\controller\CreateMediaSelectionController.class
+br\com\meuprojeto\controller\ReviewController$1.class
 br\com\meuprojeto\controller\SeasonManagementController.class
 br\com\meuprojeto\controller\MainController.class
 br\com\meuprojeto\controller\ReviewController.class

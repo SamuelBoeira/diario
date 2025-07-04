@@ -16,7 +16,6 @@ import java.util.List;
 
 /**
  * Controlador para a tela de criação e edição de Filmes.
- * LÓGICA DE EDIÇÃO CORRIGIDA PARA MODIFICAR O OBJETO EXISTENTE.
  */
 public class CreateMovieController {
 
@@ -89,7 +88,7 @@ public class CreateMovieController {
             }
 
             boolean titleExists = culturalData.getMovies().stream()
-                .anyMatch(m -> m.getTitle().equalsIgnoreCase(title) && m != movieToEdit);
+                .anyMatch(m -> m.getTitle().equalsIgnoreCase(title) && !m.equals(movieToEdit));
             if (titleExists) {
                 SceneManager.showAlert(Alert.AlertType.ERROR, "Erro de Validação", "Já existe um filme com este título.");
                 return;
@@ -104,7 +103,7 @@ public class CreateMovieController {
                 newMovie.setCast(this.currentCast);
                 culturalData.getMovies().add(newMovie);
 
-            } else { // --- MODO DE EDIÇÃO (CORRIGIDO) ---
+            } else { // --- MODO DE EDIÇÃO ---
                 movieToEdit.setTitle(title);
                 movieToEdit.setGenre(genreField.getText());
                 movieToEdit.setReleaseYear(releaseYear);
